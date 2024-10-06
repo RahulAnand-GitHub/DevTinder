@@ -1,25 +1,21 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const { adminAuth, userAuth } = require("./middlewares/auth");
 
-app.use("/", (req, res, next) => {
-  next();
+app.use("/admin", adminAuth);
+// app.use("/user", userAuth);
+
+app.get("/user", userAuth, (req, res) => {
+  res.send("User Data");
 });
 
-app.get(
-  "/user",
-  (req, res, next) => {
-    console.log("2nd route handler. ");
-    next();
-  },
-  (req, res, next) => {
-    console.log("1st Response");
-    next();
-  }
-);
+app.get("/admin/getAllDAta", adminAuth => {
+  res.send("All admin data");
+});
 
-app.get("/user", (req, res, next) => {
-  res.send('3rd rout handler.')
+app.get("/admin/deleteUser", adminAuth => {
+  res.send("Deleted use data");
 });
 
 app.listen(port, () => {
