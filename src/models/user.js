@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
   },
-});
+})
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+const User = mongoose.model('User', userSchema)
+module.exports = User
