@@ -48,7 +48,7 @@ userRouter.get('/user/connections', userAuth, async (req, res) => {
         'skill̉',
         'about',
       ])
-      console.log(connectionRequest)
+
     const data = connectionRequest.map((row) => {
       if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
         return row.toUserId
