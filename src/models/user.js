@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt') 
+const jwt = require('jsonwebtoken')
 const validator = require('validator')
 
 const userSchema = new mongoose.Schema(
@@ -53,7 +55,7 @@ const userSchema = new mongoose.Schema(
         'https://www.msrcasc.edu.in/uploads/media-upload/2023-03/hod-dummy.jpg',
       validate(value) {
         if (validator.isURL(value)) {
-          throw new Error('Password is not strong: ' + value)
+          throw new Error('Invalid Photo URL: ' + value)
         }
       },
     },
@@ -69,6 +71,26 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 )
+
+userSchema.methods.getJWT = async function () {
+  const user = this
+  const token = await jwt.sign({ _id: user._id }, 'RAHUL@7250$MERN', {
+    expiresIn: '1d',
+  })
+  return token
+}
+
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
+  const user = this
+  const passowrdHash = user.password
+
+  const isValidPassword = await bcrypt.compare(
+    passwordInputByUser,
+    passowrdHash
+  )
+  return isValidPassword
+}
+
 
 const User = mongoose.model('User', userSchema)
 module.exports = User
